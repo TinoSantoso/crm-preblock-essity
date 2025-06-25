@@ -193,3 +193,36 @@
 #23 /Users/macbookpro/Herd/crm-microapp/public/index.php(28): Laravel\\Lumen\\Application->run()
 #24 {main}
 "} 
+[2025-06-25 08:38:05] local.ERROR: Interface "Tymon\JWTAuth\Contracts\JWTSubject" not found {"exception":"[object] (Error(code: 0): Interface \"Tymon\\JWTAuth\\Contracts\\JWTSubject\" not found at /Users/macbookpro/Herd/crm-microapp/app/Models/User.php:13)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/composer/ClassLoader.php(576): include()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/composer/ClassLoader.php(427): Composer\\Autoload\\{closure}('/Users/macbookp...')
+#2 /Users/macbookpro/Herd/crm-microapp/app/Http/Controllers/AuthController.php(37): Composer\\Autoload\\ClassLoader->loadClass('App\\\\Models\\\\User')
+#3 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/BoundMethod.php(36): App\\Http\\Controllers\\AuthController->login(Object(Laravel\\Lumen\\Http\\Request))
+#4 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#5 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#6 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Laravel\\Lumen\\Application), Array, Object(Closure))
+#7 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Laravel\\Lumen\\Application), Array, Array, NULL)
+#8 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(391): Illuminate\\Container\\Container->call(Array, Array)
+#9 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(356): Laravel\\Lumen\\Application->callControllerCallable(Array, Array)
+#10 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(331): Laravel\\Lumen\\Application->callLumenController(Object(App\\Http\\Controllers\\AuthController), 'login', Array)
+#11 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(284): Laravel\\Lumen\\Application->callControllerAction(Array)
+#12 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(269): Laravel\\Lumen\\Application->callActionOnArrayBasedRoute(Array)
+#13 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(171): Laravel\\Lumen\\Application->handleFoundRoute(Array)
+#14 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(48): Laravel\\Lumen\\Application->Laravel\\Lumen\\Concerns\\{closure}(Object(Laravel\\Lumen\\Http\\Request))
+#15 /Users/macbookpro/Herd/crm-microapp/app/Http/Middleware/TrustProxiesMiddleware.php(33): Laravel\\Lumen\\Routing\\Pipeline->Laravel\\Lumen\\Routing\\{closure}(Object(Laravel\\Lumen\\Http\\Request))
+#16 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/pipeline/Pipeline.php(183): App\\Http\\Middleware\\TrustProxiesMiddleware->handle(Object(Laravel\\Lumen\\Http\\Request), Object(Closure))
+#17 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(30): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Laravel\\Lumen\\Http\\Request))
+#18 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/pipeline/Pipeline.php(119): Laravel\\Lumen\\Routing\\Pipeline->Laravel\\Lumen\\Routing\\{closure}(Object(Laravel\\Lumen\\Http\\Request))
+#19 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(428): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#20 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(167): Laravel\\Lumen\\Application->sendThroughPipeline(Array, Object(Closure))
+#21 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(112): Laravel\\Lumen\\Application->dispatch(NULL)
+#22 /Users/macbookpro/Herd/crm-microapp/public/index.php(28): Laravel\\Lumen\\Application->run()
+#23 {main}
+"} 
+[2025-06-25 08:39:59] local.ERROR: App\Models\User cannot implement Firebase\JWT\JWT - it is not an interface {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): App\\Models\\User cannot implement Firebase\\JWT\\JWT - it is not an interface at /Users/macbookpro/Herd/crm-microapp/app/Models/User.php:13)
+[stacktrace]
+#0 {main}
+"} 
+[2025-06-25 08:44:51] local.INFO: Login attempt user data: {"user":{"App\\Models\\User":{"id":5,"employee_id":"241101","name":"User 241101","email":"241101@example.com","created_at":"2025-06-25T03:20:02.000000Z","updated_at":"2025-06-25T03:20:02.000000Z"}}} 
+[2025-06-25 08:44:51] local.INFO: User employee_id: {"employee_id":"241101"} 

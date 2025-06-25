@@ -10,8 +10,7 @@
         "firebase/php-jwt": "^6.11",
         "illuminate/cache": "^10.48",
         "laravel/lumen-framework": "^10.0",
-        "laravel/tinker": "^2.10",
-        "tymon/jwt-auth": "^2.2"
+        "laravel/tinker": "^2.10"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

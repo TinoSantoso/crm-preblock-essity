@@ -53,12 +53,6 @@ class AuthController extends Controller
             'exp' => time() + 3600 // 1 hour
         ];
         $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
-        
-        // Debug Auth user after login
-        \Log::info('Auth user after login:', [
-            'employee_id' => Auth::user()->employee_id,
-            'user' => Auth::user()
-        ]);
 
         return response()->json([
             'access_token' => $token,
