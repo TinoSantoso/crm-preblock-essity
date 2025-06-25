@@ -381,8 +381,7 @@ function BootboxContent() {
                 allRows = dataGridTarget.getDataSource().items();
             }
             let appended = Array.isArray(allRows) ? [...allRows] : [];
-            // Debug: log allRows and appended before and after
-            console.log('DEBUG: allRows before append:', allRows.length, allRows);
+            
             // For each date, get all rows in visitDataByDate and add to institusi-grid with period set
             let allRowsSource = [];
             Object.entries(visitDataByDate).forEach(([date, rows]) => {
@@ -400,7 +399,7 @@ function BootboxContent() {
                     allRowsSource.push(mapped);
                 });
             });
-            console.log('DEBUG: allRows source:', allRowsSource.length, allRowsSource);
+            
             // Only append rows with (institusi, cat, period) that do not already exist in the grid
             let appendedRows = Array.isArray(allRows) ? [...allRows] : [];
             // Always deduplicate the new batch itself, and then REPLACE any existing row in the grid with the new one (not skip)
@@ -424,7 +423,6 @@ function BootboxContent() {
                 rowMap.set(key, row); // always replace with new
             });
             const mergedRows = Array.from(rowMap.values());
-            console.log('DEBUG: merged/appended rows:', mergedRows.length, mergedRows);
             dataGridTarget.option('dataSource', mergedRows);
             dataGridTarget.refresh();
         });
