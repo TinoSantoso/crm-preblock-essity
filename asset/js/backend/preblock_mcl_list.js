@@ -60,7 +60,7 @@ $(function() {
         text: "Show details",
         type: "default",
         icon: "event",
-        width: '10vw',
+        width: 'auto',
         onClick: function() {
             // Show popup-scheduler and create dxScheduler
             if ("#popup-scheduler" && $("#popup-scheduler").data("dxPopup")) {
@@ -133,17 +133,16 @@ $(function() {
                                     allowUpdating: false,
                                     allowDeleting: false,
                                 },
-                                onContentReady: function() {
-                                    // Change the color of the appointment marker in tooltip to #FFF4CE93
-                                    setTimeout(function() {
-                                        $('.dx-tooltip-appointment-item-marker-body').css('background-color', '#ffa94d');
-                                    }, 0);
-                                },
                                 onAppointmentTooltipShowing: function() {
-                                    // Also set color when tooltip is shown
-                                    setTimeout(function() {
+                                    const tooltipContainer = document.body;
+                                    const colorizeMarkers = function() {
                                         $('.dx-tooltip-appointment-item-marker-body').css('background-color', '#ffa94d');
-                                    }, 0);
+                                    };
+                                    colorizeMarkers();
+                                    if (!window._dxTooltipMarkerObserver) {
+                                        window._dxTooltipMarkerObserver = new MutationObserver(colorizeMarkers);
+                                        window._dxTooltipMarkerObserver.observe(tooltipContainer, { childList: true, subtree: true });
+                                    }
                                 },
                                 onAppointmentFormOpening: function(e) {
                                     e.popup.option('showTitle', true);
@@ -286,7 +285,6 @@ $(function() {
                                 }
                             }).dxScheduler("instance");
 
-                            // Fix: force repaint and set currentView/currentDate after a short delay to avoid buggy initial rendering
                             setTimeout(function() {
                                 if (schedulerInstance) {
                                     const today = new Date();

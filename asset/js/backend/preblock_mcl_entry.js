@@ -108,6 +108,7 @@ $(function() {
             },
         ],
         showBorders: true,
+        showRowLines: true,
         paging: { enabled: true, pageIndex: 0, pageSize: 25 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [25, 50, 100] },
         filterRow: { visible: true },
