@@ -272,3 +272,39 @@
 #1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
 #2 {main}
 "} 
+[2025-06-25 09:08:48] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
+[2025-06-25 09:12:50] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
+[2025-06-25 09:13:16] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
+[2025-06-25 09:13:17] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
+[2025-06-25 09:13:26] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
+[2025-06-25 09:13:31] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 

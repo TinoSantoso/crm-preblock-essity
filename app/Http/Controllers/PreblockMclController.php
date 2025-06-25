@@ -25,11 +25,6 @@ class PreblockMclController extends Controller
      */
     public function getAllCrmDetails()
     {
-        /* $empIdList = [
-            '191270', '191107', '191289', '210402', '210801', '191105', '191230',
-            '191272', '191218', '241101', '191255', '191268', '210704', '191245',
-            '231101', '191217', '230501', '191207', '200704', '191283', '240904'
-        ]; */
         $empIdList = [
             '210402', '230501', '191230', '191105', '241101'
         ];
@@ -203,8 +198,7 @@ class PreblockMclController extends Controller
         $data = $request->all();
         $header = $data['header'] ?? [];
         $details = $data['details'] ?? [];
-        Log::info('Updating CRM visit with header', $header);
-        Log::info('Updating CRM visit with detail', $details);
+        
         // Transform period to year and month
         $period = $header['period'] ?? null;
         $year = null;
