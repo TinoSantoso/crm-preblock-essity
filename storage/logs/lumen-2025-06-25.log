@@ -226,3 +226,49 @@
 "} 
 [2025-06-25 08:44:51] local.INFO: Login attempt user data: {"user":{"App\\Models\\User":{"id":5,"employee_id":"241101","name":"User 241101","email":"241101@example.com","created_at":"2025-06-25T03:20:02.000000Z","updated_at":"2025-06-25T03:20:02.000000Z"}}} 
 [2025-06-25 08:44:51] local.INFO: User employee_id: {"employee_id":"241101"} 
+[2025-06-25 08:53:05] local.ERROR: Call to undefined function config_path() {"exception":"[object] (Error(code: 0): Call to undefined function config_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-5802e590a92e23606bb54d2909564178.php:79)
+[stacktrace]
+#0 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Target [Illuminate\Contracts\Http\Kernel] is not instantiable. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target [Illuminate\\Contracts\\Http\\Kernel] is not instantiable. at /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php:1126)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(921): Illuminate\\Container\\Container->notInstantiable('Illuminate\\\\Cont...')
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(795): Illuminate\\Container\\Container->build('Illuminate\\\\Cont...')
+#2 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(731): Illuminate\\Container\\Container->resolve('Illuminate\\\\Cont...', Array)
+#3 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Application.php(327): Illuminate\\Container\\Container->make('Illuminate\\\\Cont...', Array)
+#4 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/helpers.php(42): Laravel\\Lumen\\Application->make('Illuminate\\\\Cont...', Array)
+#5 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-79de9752f999b6e261cd05abba67a5ce.php(75): app('Illuminate\\\\Cont...')
+#6 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Call to undefined function config_path() {"exception":"[object] (Error(code: 0): Call to undefined function config_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-d769f81c5eaf96f1f253a56481405376.php:68)
+[stacktrace]
+#0 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Call to a member function getRoutes() on array {"exception":"[object] (Error(code: 0): Call to a member function getRoutes() on array at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-1e7ea3cf42a2f9b84f3de09530e2c135.php:71)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-1e7ea3cf42a2f9b84f3de09530e2c135.php(161): class@anonymous->all()
+#1 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Call to undefined method Laravel\Lumen\Application::currentLocale() {"exception":"[object] (Error(code: 0): Call to undefined method Laravel\\Lumen\\Application::currentLocale() at /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/support/Facades/Facade.php:355)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-e691d398bdcb7c046a57f3e4553bb28a.php(425): Illuminate\\Support\\Facades\\Facade::__callStatic('currentLocale', Array)
+#1 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Unresolvable dependency resolving [Parameter #1 [ <required> $cachePath ]] in class Illuminate\View\Compilers\Compiler {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Unresolvable dependency resolving [Parameter #1 [ <required> $cachePath ]] in class Illuminate\\View\\Compilers\\Compiler at /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php:1141)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(1050): Illuminate\\Container\\Container->unresolvablePrimitive(Object(ReflectionParameter))
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(981): Illuminate\\Container\\Container->resolvePrimitive(Object(ReflectionParameter))
+#2 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(943): Illuminate\\Container\\Container->resolveDependencies(Array)
+#3 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(795): Illuminate\\Container\\Container->build('Illuminate\\\\View...')
+#4 /Users/macbookpro/Herd/crm-microapp/vendor/illuminate/container/Container.php(731): Illuminate\\Container\\Container->resolve('Illuminate\\\\View...', Array)
+#5 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/Application.php(327): Illuminate\\Container\\Container->make('Illuminate\\\\View...', Array)
+#6 /Users/macbookpro/Herd/crm-microapp/vendor/laravel/lumen-framework/src/helpers.php(42): Laravel\\Lumen\\Application->make('Illuminate\\\\View...', Array)
+#7 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-7563160ca998bde672640aa1e68dfd08.php(68): app('Illuminate\\\\View...')
+#8 {main}
+"} 
+[2025-06-25 08:53:05] local.ERROR: Call to undefined function app_path() {"exception":"[object] (Error(code: 0): Call to undefined function app_path() at /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php:142)
+[stacktrace]
+#0 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(81): class@anonymous->getStandardClasses()
+#1 /Users/macbookpro/Herd/crm-microapp/vendor/_laravel_ide/discover-9abd86d674d0ba851f4ac7b31349196a.php(369): class@anonymous->all()
+#2 {main}
+"} 
