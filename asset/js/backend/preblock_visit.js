@@ -9,9 +9,9 @@ $(function() {
         items: [
             {
                 itemType: "group",
-                colCount: 3,
+                colCount: 2,
                 items: [
-                    {
+                    /* {
                         dataField: "emp_id",
                         label: { text: "Employee ID" },
                         editorType: "dxSelectBox",
@@ -26,7 +26,7 @@ $(function() {
                             displayExpr: "name",
                             valueExpr: "id"
                         }
-                    },
+                    }, */
                     {
                         dataField: "period",
                         label: { text: "Period" },
@@ -96,7 +96,6 @@ async function loadData() {
     }
     // Build query params
     const params = new URLSearchParams();
-    if (formData.emp_id) params.append('emp_id', formData.emp_id);
     if (year) params.append('year', year);
     if (month) params.append('month', month);
     if (visit_date) params.append('visit_date', visit_date);
@@ -122,7 +121,7 @@ async function loadData() {
         $("#visit-grid").dxDataGrid({
             dataSource: gridData,
             columns: [
-            { dataField: "trans_no", caption: "Trans Noooo" },
+            { dataField: "trans_no", caption: "Trans No" },
             { dataField: "emp_id", caption: "Employee ID" },
             { dataField: "year", caption: "Year", alignment: "left" },
             { dataField: "month", caption: "Month", alignment: "left" },

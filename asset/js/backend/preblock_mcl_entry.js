@@ -50,14 +50,14 @@ $(function() {
                 colSpan: 1,
                 editorOptions: { height: 35, disabled: true }
             },
-            {
+            /* {
                 dataField: "empId",
                 visible: false, // Hide the Employee ID field
                 label: { text: "Employee ID" },
                 editorType: "dxTextBox",
                 colSpan: 1,
                 editorOptions: { disabled: true, readOnly: true },
-            }
+            } */
         ]
     }).dxForm("instance");
 
@@ -162,11 +162,7 @@ $(function() {
                                     const dataGridTarget = $("#institusi-grid").dxDataGrid("instance");
                                     let selectedRows = dataGridSource.getSelectedRowsData();
                                     if(selectedRows.length > 0) {
-                                        // Set empId in headerDxForm according to emp_id value of the first selected row
-                                        if (selectedRows[0].emp_id) {
-                                            headerDxForm.option('formData.empId', selectedRows[0].emp_id);
-                                            headerDxForm.repaint();
-                                        }
+                                        
                                         $popup.dxPopup('instance').hide();
                                     } else {
                                         DevExpress.ui.notify({ message: 'Please select a data to apply.', width: 400, type: "warning"}, { position: "top right", direction: "down-push" }, 3000);
@@ -264,8 +260,7 @@ function BootboxContent() {
             { dataField: "contact_name", caption: "Contact", fixed: true, fixedPosition: 'left' },
             { dataField: "category", caption: "Category" },
             { dataField: "target_call", caption: "Target call", alignment: "left" },
-            { dataField: "specialty", caption: "Specialty" },
-            { dataField: "emp_id", caption: "Employee ID" }
+            { dataField: "specialty", caption: "Specialty" }
         ],
         filterRow: { visible: true },
         width: "100%",
@@ -295,8 +290,7 @@ function BootboxContent() {
             { dataField: "contact_name", caption: "Contact", fixed: true, fixedPosition: "left" },
             { dataField: "category", caption: "Category" },
             { dataField: "target_call", caption: "Target call", alignment: "left" },
-            { dataField: "specialty", caption: "Specialty" },
-            { dataField: "emp_id", caption: "Employee ID" }
+            { dataField: "specialty", caption: "Specialty" }
         ],
         filterRow: { visible: true },
         width: "100%",
@@ -328,10 +322,10 @@ function BootboxContent() {
                 accGrid.getDataSource().store().load().done(function(accData) {
                     const selected = visitGrid.getSelectedRowsData();
                     if (selected.length > 0) {
-                        const updatedVisitData = visitData.filter(row => !selected.some(sel => sel.account === row.account && sel.emp_id === row.emp_id));
+                        const updatedVisitData = visitData.filter(row => !selected.some(sel => sel.account === row.account));
                         const updatedAccData = [...accData];
                         selected.forEach(function(row) {
-                            if (!updatedAccData.some(r => r.account === row.account && r.emp_id === row.emp_id && r.contact_name === row.contact_name && r.category === row.category && r.target_call === row.target_call && r.specialty === row.specialty)) {
+                            if (!updatedAccData.some(r => r.account === row.account && r.contact_name === row.contact_name && r.category === row.category && r.target_call === row.target_call && r.specialty === row.specialty)) {
                                 updatedAccData.push(row);
                             }
                         });
@@ -354,10 +348,16 @@ function BootboxContent() {
                 visitGrid.getDataSource().store().load().done(function(visitData) {
                     const selected = accGrid.getSelectedRowsData();
                     if (selected.length > 0) {
-                        const updatedAccData = accData.filter(row => !selected.some(sel => sel.account === row.account && sel.emp_id === row.emp_id));
+                        const updatedAccData = accData.filter(row => !selected.some(sel => sel.account === row.account));
                         const updatedVisitData = [...visitData];
                         selected.forEach(function(row) {
-                            if (!updatedVisitData.some(r => r.account === row.account && r.emp_id === row.emp_id && r.contact_name === row.contact_name && r.category === row.category && r.target_call === row.target_call && r.specialty === row.specialty)) {
+                            if (!updatedVisitData.some(r => 
+                                r.account === row.account &&
+                                r.contact_name === row.contact_name &&
+                                r.category === row.category &&
+                                r.target_call === row.target_call &&
+                                r.specialty === row.specialty
+                            )) {
                                 updatedVisitData.push(row);
                             }
                         });

@@ -54,3 +54,5 @@ yarn-debug.log*
 yarn-error.log*
 
 devextreme-license.*
+/storage/framework/cache/
+/storage/framework/sessions/

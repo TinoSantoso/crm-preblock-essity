@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
@@ -54,11 +53,14 @@ class AuthController extends Controller
         ];
         $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
 
+        // Optionally store token in session
+        $request->session()->put('jwt_token', $token);
+        \Log::info('JWT token stored in session.', ['jwt_token' => $token]);
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => 3600,
-            'employee_id' => $user->employee_id
+            'expires_in' => 3600 
         ]);
     }
 
@@ -89,6 +91,8 @@ class AuthController extends Controller
             $ttl = 3600; // 1 hour, match token expiry
             Cache::put('blacklisted_jwt_' . $token, true, $ttl);
         }
+        $request->session()->flush();
+
         return response()->json(['message' => 'Successfully logged out']);
     }
 

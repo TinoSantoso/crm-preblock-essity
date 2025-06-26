@@ -13,29 +13,31 @@ use Dompdf\Options;
 class PreblockMclController extends Controller
 {
     protected $jakartaTz;
+    protected $accessToken;
+    protected $credentials;
 
     public function __construct()
     {
         $this->jakartaTz = new \DateTimeZone('Asia/Jakarta');
+        $this->accessToken = env('CRM_PREBLOCK_TOKEN');
+        if ($this->accessToken) {
+            try {
+                $this->credentials = \Firebase\JWT\JWT::decode($this->accessToken, new \Firebase\JWT\Key(env('JWT_SECRET'), 'HS256'));
+            } catch (\Exception $e) {
+                Log::error('Failed to decode accessToken: ' . $e->getMessage());
+            }
+        }
     }
 
     /**
      * Retrieve all crm_details records (for internal use)
-     * Uses the same emp_id for all subsequent calls as the first random pick, stored in cache.
      */
     public function getAllCrmDetails()
     {
-        $empIdList = [
-            '210402', '230501', '191230', '191105', '241101'
-        ];
-        $cacheKey = 'preblock_first_emp_id';
-        $firstEmpId = Cache::get($cacheKey);
-        if (!$firstEmpId) {
-            $firstEmpId = $empIdList[array_rand($empIdList)];
-            Cache::put($cacheKey, $firstEmpId, 60*10); // cache for 10 minutes
-        }
+        $auth = \App\Models\User::find($this->credentials->sub);
+
         return DB::table('crm_details')
-            ->where('emp_id', $firstEmpId)
+            ->where('emp_id', $auth->employee_id)
             ->where('target_call', '>', 0)
             ->get();
     }
@@ -66,14 +68,15 @@ class PreblockMclController extends Controller
         $details = $data['details'] ?? [];
 
         // Check for duplicate (emp_id + account) before storing
-        $empId = $header['empId'] ?? null;
+        $auth = \App\Models\User::find($this->credentials->sub);
+        $empId = $auth->employee_id ?? null;
         if ($empId && is_array($details)) {
             foreach ($details as $row) {
                 $account = $row['institusi'] ?? null;
                 if ($account && $this->checkVisitDetailByEmpAndAccount($empId, $account)) {
                     return response()->json([
-                        'status' => 'failed',
-                        'error' => "Duplicate entry: Employee ID $empId already has account $account in visit details."
+                    'status' => 'failed',
+                    'error' => "Duplicate entry: Employee ID $empId already has account $account in visit details."
                     ], 409);
                 }
             }
@@ -116,7 +119,7 @@ class PreblockMclController extends Controller
                 // Insert into crm_visits
                 DB::table('crm_visits')->insert([
                     'trans_no' => $nextTransNo,
-                    'emp_id' => $header['empId'] ?? null,
+                    'emp_id' => $empId ?? null,
                     'year' => $year,
                     'month' => $month,
                     'remark' => $header['remark'] ?? null,
@@ -285,13 +288,14 @@ class PreblockMclController extends Controller
      */
     public function getVisits(Request $request)
     {
+        $auth = \App\Models\User::find($this->credentials->sub);
         $query = \App\Models\CrmVisit::with(['details' => function($query) use ($request) {
             if ($visitDate = $request->query('visit_date')) {
                 $query->whereDate('visit_date', $visitDate);
             }
         }])->orderByDesc('created_at');
 
-        $empId = $request->query('emp_id');
+        $empId = $auth->employee_id;
         $year = $request->query('year');
         $month = $request->query('month');
 
@@ -311,16 +315,22 @@ class PreblockMclController extends Controller
         }
 
         $visits = $query->get();
-        if ($visits->isEmpty()) {
-            Log::warning('No visits found matching the specified criteria.', [
+
+        try {
+            // Check if all visits have empty details
+            if ($visits->isEmpty() || $visits->every(function($visit) {
+                return $visit->details->isEmpty();
+            })) {
+                throw new \Exception('No visits with details found matching the specified criteria.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching visits: ' . $e->getMessage(), [
                 'query' => $query->toSql(),
                 'bindings' => $query->getBindings()
             ]);
             return response()->json([
-                'message' => 'No visits found matching the specified criteria.',
-                'debug_info' => [
-                    'bindings' => $query->getBindings()
-                ],
+                'status' => 'failed',
+                'error' => $e->getMessage(),
                 'result' => []
             ], 404);
         }
@@ -432,7 +442,8 @@ class PreblockMclController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        $empId = $request->input('emp_id');
+        $auth = \App\Models\User::find($this->credentials->sub);
+        $empId = $auth->employee_id;
         $year = $request->input('year'); 
         $month = $request->input('month');
 

@@ -48,6 +48,14 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {
+    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session');
+});
+
+$app->singleton('session.store', function () use ($app) {
+    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session.store');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -61,6 +69,7 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('cache');
+$app->configure('session');
 
 /*
 |--------------------------------------------------------------------------
@@ -79,11 +88,12 @@ $app->configure('cache');
 
 $app->middleware([
     App\Http\Middleware\TrustProxiesMiddleware::class,
+    Illuminate\Session\Middleware\StartSession::class
 ]);
 
-$app->routeMiddleware([
+/* $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-]);
+]); */
 
 // Register JWT route middleware (custom, using firebase/php-jwt)
 $app->routeMiddleware([

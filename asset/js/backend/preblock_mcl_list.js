@@ -215,8 +215,7 @@ $(function() {
                                                         trans_no: selected.trans_no,
                                                         transaction_date: selected.created_at ? new Date(selected.created_at) : null,
                                                         period: selected.year && selected.month ? new Date(selected.year, selected.month, 1) : null,
-                                                        remark: selected.remark,
-                                                        empId: selected.emp_id
+                                                        remark: selected.remark
                                                     });
                                                     headerDxForm.repaint();
                                                     // Defensive: ensure details is an array and not undefined/null
