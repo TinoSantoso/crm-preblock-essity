@@ -11,22 +11,6 @@ $(function() {
                 itemType: "group",
                 colCount: 2,
                 items: [
-                    /* {
-                        dataField: "emp_id",
-                        label: { text: "Employee ID" },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: [
-                                { id: "191105", name: "191105" },
-                                { id: "191230", name: "191230" },
-                                { id: "210402", name: "210402" },
-                                { id: "230501", name: "230501" },
-                                { id: "241101", name: "241101" }
-                            ],
-                            displayExpr: "name",
-                            valueExpr: "id"
-                        }
-                    }, */
                     {
                         dataField: "period",
                         label: { text: "Period" },
