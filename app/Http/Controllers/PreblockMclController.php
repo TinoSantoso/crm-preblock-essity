@@ -534,50 +534,27 @@ class PreblockMclController extends Controller
             $html .= '<div style="color:#888;font-size:' . $fontSizeSubtitle . 'px;">No details data found for this selection.</div>';
         } else {
             foreach ($visitDates as $visitDate) {
-                $html .= '<div class="visit-date-title">Visit Date: ' . htmlspecialchars($visitDate) . '</div>';
-                $html .= '<table>'
-                    . '<thead>'
-                    . '<tr>'
-                    . '<th style="width:' . $colWidthNo . '%;">No</th>'
-                    . '<th style="width:' . $colWidthInstitusi . '%; text-align: center;">Institusi</th>'
-                    . '<th style="width:' . $colWidthSpecialty . '%; text-align: center;">Specialty</th>'
-                    . '<th style="width:' . $colWidthIndividu . '%; text-align: center;">Individu</th>'
-                    . '</tr>'
-                    . '</thead><tbody>';
-
-                $rowsPerPage = 100; // Set to minimum 100 rows per page
-                $details = $grouped[$visitDate];
-                $totalRows = count($details);
-                $currentRow = 0;
-
-                while ($currentRow < $totalRows) {
-                    // Add page break if needed
-                    if ($currentRow > 0 && $currentRow % $rowsPerPage === 0) {
-                        $html .= '</tbody></table>';
-                        $html .= '<div style="page-break-before: always;"></div>';
-                        $html .= '<div class="visit-date-title">Visit Date: ' . htmlspecialchars($visitDate) . ' (continued)</div>';
-                        $html .= '<table>'
-                            . '<thead>'
-                            . '<tr>'
-                            . '<th style="width:' . $colWidthNo . '%;">No</th>'
-                            . '<th style="width:' . $colWidthInstitusi . '%;">Institusi</th>'
-                            . '<th style="width:' . $colWidthSpecialty . '%; text-align: center;">Specialty</th>'
-                            . '<th style="width:' . $colWidthIndividu . '%;">Individu</th>'
-                            . '</tr>'
-                            . '</thead><tbody>';
-                    }
-
-                    $detail = $details[$currentRow];
-                    $html .= '<tr>'
-                        . '<td>' . ($currentRow + 1) . '</td>'
-                        . '<td>' . htmlspecialchars($detail->account ?? '') . '</td>'
-                        . '<td style="text-align: center;">' . htmlspecialchars($detail->class ?? '') . '</td>'
-                        . '<td>' . htmlspecialchars($detail->contact ?? '') . '</td>'
-                        . '</tr>';
-
-                    $currentRow++;
-                }
-                $html .= '</tbody></table>';
+            $details = $grouped[$visitDate];
+            $html .= '<div class="visit-date-title">Visit Date: ' . htmlspecialchars($visitDate) . '</div>';
+            $html .= '<table>';
+            $html .= '<thead><tr>'
+                . '<th style="width:' . $colWidthNo . '%;">No</th>'
+                . '<th style="width:' . $colWidthInstitusi . '%; text-align: center;">Account</th>'
+                . '<th style="width:' . $colWidthSpecialty . '%; text-align: center;">Specialty</th>'
+                . '<th style="width:' . $colWidthIndividu . '%; text-align: center;">Contact</th>'
+                . '<th style="width:10%; text-align: center;">Visit Date</th>'
+                . '</tr></thead><tbody>';
+            $rowNo = 1; // Reset row number for each visit date group
+            foreach ($details as $detail) {
+                $html .= '<tr>'
+                . '<td>' . $rowNo++ . '</td>'
+                . '<td>' . htmlspecialchars($detail->account ?? '') . '</td>'
+                . '<td style="text-align: center;">' . htmlspecialchars($detail->class ?? '') . '</td>'
+                . '<td>' . htmlspecialchars($detail->contact ?? '') . '</td>'
+                . '<td style="text-align: center;">' . htmlspecialchars($visitDate) . '</td>'
+                . '</tr>';
+            }
+            $html .= '</tbody></table>';
             }
         }
         $html .= '</div></body></html>';
@@ -599,5 +576,4 @@ class PreblockMclController extends Controller
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
     }
-
 }
