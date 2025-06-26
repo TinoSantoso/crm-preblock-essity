@@ -15,8 +15,9 @@ class PreblockMclController extends Controller
     protected $jakartaTz;
     protected $accessToken;
     protected $credentials;
+    protected $auth;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->jakartaTz = new \DateTimeZone('Asia/Jakarta');
         $this->accessToken = env('CRM_PREBLOCK_TOKEN');
@@ -27,6 +28,10 @@ class PreblockMclController extends Controller
                 Log::error('Failed to decode accessToken: ' . $e->getMessage());
             }
         }
+        $this->auth = \App\Models\User::find($this->credentials->sub);
+        if ($this->auth) {
+            $request->session()->put('auth_user', $this->auth);
+        }
     }
 
     /**
@@ -34,10 +39,8 @@ class PreblockMclController extends Controller
      */
     public function getAllCrmDetails()
     {
-        $auth = \App\Models\User::find($this->credentials->sub);
-
         return DB::table('crm_details')
-            ->where('emp_id', $auth->employee_id)
+            ->where('emp_id', $this->auth->employee_id)
             ->where('target_call', '>', 0)
             ->get();
     }
@@ -68,8 +71,7 @@ class PreblockMclController extends Controller
         $details = $data['details'] ?? [];
 
         // Check for duplicate (emp_id + account) before storing
-        $auth = \App\Models\User::find($this->credentials->sub);
-        $empId = $auth->employee_id ?? null;
+        $empId = $this->auth->employee_id ?? null;
         if ($empId && is_array($details)) {
             foreach ($details as $row) {
                 $account = $row['institusi'] ?? null;
@@ -288,14 +290,13 @@ class PreblockMclController extends Controller
      */
     public function getVisits(Request $request)
     {
-        $auth = \App\Models\User::find($this->credentials->sub);
         $query = \App\Models\CrmVisit::with(['details' => function($query) use ($request) {
             if ($visitDate = $request->query('visit_date')) {
                 $query->whereDate('visit_date', $visitDate);
             }
         }])->orderByDesc('created_at');
 
-        $empId = $auth->employee_id;
+        $empId = $this->auth->employee_id;
         $year = $request->query('year');
         $month = $request->query('month');
 
@@ -442,8 +443,7 @@ class PreblockMclController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        $auth = \App\Models\User::find($this->credentials->sub);
-        $empId = $auth->employee_id;
+        $empId = $this->auth->employee_id;
         $year = $request->input('year'); 
         $month = $request->input('month');
 
@@ -529,7 +529,7 @@ class PreblockMclController extends Controller
         }
         h2 {
             margin: 0;
-            margin-top: 4px;
+            margin-top: 5px;
             margin-right: 16px;
             font-size: ' . $fontSizeTitle . 'px;
             display: inline-block;

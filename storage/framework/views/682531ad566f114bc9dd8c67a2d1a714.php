@@ -130,15 +130,15 @@
 
     $(document).ready(function() {
         // On page load, activate the tab and pane marked as active or from storage
-        var storedTab = getActiveTab();
-        var $tabToActivate;
+        const storedTab = getActiveTab();
+        let $tabToActivate;
         if (storedTab && $('.nav-tabs a[href="' + storedTab + '"]').length) {
             $tabToActivate = $('.nav-tabs a[href="' + storedTab + '"]');
         } else {
             $tabToActivate = $('.nav-tabs li.active a');
         }
         if ($tabToActivate && $tabToActivate.length) {
-            var target = $tabToActivate.attr('href');
+            const target = $tabToActivate.attr('href');
             $('.tab-pane').removeClass('active show');
             $('.nav-tabs li').removeClass('active');
             $tabToActivate.parent().addClass('active');
@@ -147,14 +147,14 @@
 
         // Helper to show 'No data' message for empty grids
         function showNoDataIfEmpty(gridSelector) {
-            var grid = $(gridSelector).dxDataGrid('instance');
+            const grid = $(gridSelector).dxDataGrid('instance');
             if (grid) {
-                var data = grid.getDataSource().items();
-                if (!data || data.length === 0) {
-                    grid.option('noDataText', 'No data');
-                } else {
-                    grid.option('noDataText', '');
-                }
+            const data = grid.getDataSource().items();
+            if (!data || data.length === 0) {
+                grid.option('noDataText', 'No data');
+            } else {
+                grid.option('noDataText', '');
+            }
             }
         }
         // Initial check for both grids
@@ -163,7 +163,7 @@
 
         $('.nav-tabs a').on('click', function(e) {
             e.preventDefault();
-            var target = $(this).attr('href');
+            const target = $(this).attr('href');
             // Remove 'active' and 'show' from all tab-panes and nav-tabs
             $('.tab-pane').removeClass('active show');
             $('.nav-tabs li').removeClass('active');
@@ -174,20 +174,20 @@
 
             // Only refresh and check grid if the tab is now active
             if ($(this).parent().hasClass('active')) {
-                if (target === '#Ent') {
-                    showNoDataIfEmpty('#institusi-grid');
-                    var grid = $('#institusi-grid').dxDataGrid('instance');
-                    if (grid) {
-                        grid.refresh();
-                    }
+            if (target === '#Ent') {
+                showNoDataIfEmpty('#institusi-grid');
+                const grid = $('#institusi-grid').dxDataGrid('instance');
+                if (grid) {
+                grid.refresh();
                 }
-                if (target === '#Lst') {
-                    showNoDataIfEmpty('#list-panel');
-                    var grid = $('#list-panel').dxDataGrid('instance');
-                    if (grid) {
-                        grid.refresh();
-                    }
+            }
+            if (target === '#Lst') {
+                showNoDataIfEmpty('#list-panel');
+                const grid = $('#list-panel').dxDataGrid('instance');
+                if (grid) {
+                grid.refresh();
                 }
+            }
             }
         });
 

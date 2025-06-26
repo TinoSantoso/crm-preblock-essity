@@ -13,10 +13,6 @@ function exportData() {
     const popupContent = $(
         `<div>
             <div style="margin-bottom:15px;">
-                <label for="export-emp">Employee:</label>
-                <div id="export-emp"></div>
-            </div>
-            <div style="margin-bottom:15px;">
                 <label for="export-period">Period:</label>
                 <div id="export-period"></div>
             </div>
@@ -25,7 +21,7 @@ function exportData() {
     $popup.append(popupContent);
 
     // Initialize selectboxes before showing popup
-    const employeeSelect = $('#export-emp').dxSelectBox({
+    /* const employeeSelect = $('#export-emp').dxSelectBox({
         dataSource: [
             { id: '210402', name: 'EmployeeID 210402' },
             { id: '230501', name: 'EmployeeID 230501' },
@@ -38,7 +34,7 @@ function exportData() {
         placeholder: 'Select Employee',
         searchEnabled: true,
         value: exportEmpValue // set previous value if available
-    }).dxSelectBox('instance');
+    }).dxSelectBox('instance'); */
 
     const periodSelect = $('#export-period').dxDateBox({
         displayFormat: "yyyy-MM",
@@ -57,8 +53,8 @@ function exportData() {
 
     $popup.dxPopup({
         title: 'Export Data',
-        width: "50vw",
-        height: 320,
+        width: "40vw",
+        height: "auto",
         showCloseButton: true,
         hideOnOutsideClick: true,
         visible: true,
@@ -77,7 +73,6 @@ function exportData() {
         ],
         onHiding: function() {
             // Store values before hiding
-            exportEmpValue = employeeSelect.option('value');
             exportPeriodValue = periodSelect.option('value');
         },
         onHidden: function() {
@@ -87,10 +82,9 @@ function exportData() {
     });
 
     $('#export-preview').on('click', async function() {
-        let empId = employeeSelect.option('value');
         let period = periodSelect.option('value');
-        if (!empId || !period) {
-            DevExpress.ui.notify({ message: 'Please select both Employee and Period.', width: 400, type: 'warning'}, { position: 'top right', direction: 'down-push' }, 3000);
+        if (!period) {
+            DevExpress.ui.notify({ message: 'Please select Period.', width: 400, type: 'warning'}, { position: 'top right', direction: 'down-push' }, 3000);
             return;
         }
         // Parse period to year and month
@@ -113,10 +107,9 @@ function exportData() {
             return;
         }
         try {
-            empId = encodeURIComponent(empId);
             year = encodeURIComponent(year);
             month = encodeURIComponent(month);
-            const url = `/crm-visits?emp_id=${empId}&year=${year}&month=${month}`;
+            const url = `/crm-visits?year=${year}&month=${month}`;
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -128,6 +121,11 @@ function exportData() {
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
+            // Populate empId from data if available
+            let empId = '';
+            if (Array.isArray(data) && data.length > 0 && data[0].emp_id) {
+                empId = data[0].emp_id;
+            }
 
             // Group details by visit_date
             let allDetails = [];
@@ -258,7 +256,6 @@ function exportData() {
 
                         // Add parameters as hidden fields
                         const params = {
-                            emp_id: "${empId}",
                             year: "${year}",
                             month: "${month}"
                         };
