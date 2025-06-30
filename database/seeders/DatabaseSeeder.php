@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CrmHeadersSeeder::class,
             CrmDetailsSeeder::class,
+            SalesPanelReportsTableSeeder::class
         ]);
     }
 }

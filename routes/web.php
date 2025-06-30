@@ -30,6 +30,8 @@ $router->get('/crm-visits', 'PreblockMclController@getVisits');
 $router->post('/crm-visit-detail/{id}/is-visited', 'PreblockMclController@updateIsVisited');
 $router->post('/crm-visits/export-pdf', 'PreblockMclController@exportPdf');
 
+$router->get('/report-salesps', 'ReportSalesDistrictController@index');
+
 $router->group(['prefix' => 'auth'], function ($router) {
     $router->post('login', 'AuthController@login'); // No middleware here!
     $router->post('logout', ['middleware' => 'auth:api', 'uses' => 'AuthController@logout']);
