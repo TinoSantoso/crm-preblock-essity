@@ -11,7 +11,8 @@
         "illuminate/cache": "^10.48",
         "illuminate/session": "^10.48",
         "laravel/lumen-framework": "^10.0",
-        "laravel/tinker": "^2.10"
+        "laravel/tinker": "^2.10",
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

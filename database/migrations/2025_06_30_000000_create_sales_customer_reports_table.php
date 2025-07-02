@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('sales_panel_reports', function (Blueprint $table) {
+        Schema::create('sales_customer_reports', function (Blueprint $table) {
             $table->id();
             $table->string('distName')->nullable(); // District
             $table->string('areaName')->nullable(); // Area Name
@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->string('custName')->nullable(); // Customer Name
             $table->string('prodGroup')->nullable(); // Product Group
             $table->string('prod_name')->nullable(); // Product Name
+            $table->integer('period_year')->nullable(); // Year
+            $table->integer('period_month')->nullable(); // Month
             // CURRENT MONTH
             $table->decimal('gross', 15, 2)->nullable(); // Gross
             $table->decimal('qty', 15, 2)->nullable(); // Qty

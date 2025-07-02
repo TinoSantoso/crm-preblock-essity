@@ -30,17 +30,7 @@
                         <div class="dx-field">
                             
                             <div class="dx-field-value" style="float:left">
-                              
-                              <div id="slt" class="d-flex align-items-center" style="gap: 16px;">
-                                <div>
-                                  <label for="period" style="font-weight: 600; margin-bottom: 4px; display: block;">Period</label>
-                                  <div id="period"></div>
-                                </div>
-                                <div>
-                                  <label for="district" style="font-weight: 600; margin-bottom: 4px; display: block;">District</label>
-                                  <div id="district"></div>
-                                </div>
-                              </div>
+                              <div id="filterForm"></div>
                             </div>
 
                         </div>
@@ -59,55 +49,69 @@
         </div>
     </section>
     <script>
-        $(document).ready(function() {
-            var now = new Date();
-            var listData = [];
-            var select = 1;
-            
-            $("#period").dxDateBox({
-              pickerType: 'calendar',
-              displayFormat: 'monthAndYear',
-              labelMode: 'outside',
-              openOnFieldClick: true,
-              calendarOptions: {
-                maxZoomLevel: 'year',
-                minZoomLevel: 'century',
-              },
-              width: "20vw",
-              type: "date",
-              value: now,
-              elementAttr: {
-                style: "margin-bottom: 16px;"
-              }
-            });
+            $(document).ready(function() {
+                const now = new Date();
+                let listData = [];
+                let select = 1;
 
-            $("#district").dxTagBox({
-              value: [],
-              placeholder: "Select District(s)",
-              dataSource: [
-                "Northern Sumatra",
-                "Bali Nusra",
-                "Easter Jakarta",
-                "Ecommerce",
-                "Far East",
-                "Kalimantan",
-                "Northern East Java",
-                "Northern Central Java",
-                "West Java",
-                "Western Jakarta",
-                "Southern East Java",
-                "Southern Central Java",
-                "Southern Sumatra"
-              ],
-              showSelectionControls: true,
-              showMultiTagOnly: false,
-              selectAllMode: "allPages",
-              onValueChanged: function(e) {
-              // Handle value change if needed
-              },
-              width: "20vw"
-            });
-            
+                const areaOptions = [
+                  "Northern Sumatra",
+                  "Bali Nusra",
+                  "Easter Jakarta",
+                  "Ecommerce",
+                  "Far East",
+                  "Kalimantan",
+                  "Northern East Java",
+                  "Northern Central Java",
+                  "West Java",
+                  "Western Jakarta",
+                  "Southern East Java",
+                  "Southern Central Java",
+                  "Southern Sumatra"
+                ];
+
+                $("#filterForm").dxForm({
+                    formData: {
+                        period: now,
+                        district: []
+                    },
+                    items: [
+                        {
+                            dataField: "period",
+                            label: { text: "Period" },
+                            editorType: "dxDateBox",
+                            isRequired: true,
+                            editorOptions: {
+                                pickerType: 'calendar',
+                                displayFormat: 'monthAndYear',
+                                openOnFieldClick: true,
+                                calendarOptions: {
+                                    maxZoomLevel: 'year',
+                                    minZoomLevel: 'century',
+                                },
+                                width: "20vw",
+                                type: "date",
+                                elementAttr: {
+                                    style: "margin-bottom: 16px;"
+                                }
+                            }
+                        },
+                        {
+                            dataField: "district",
+                            label: { text: "District" },
+                            editorType: "dxTagBox",
+                            isRequired: false,
+                            editorOptions: {
+                                placeholder: "Select District(s)",
+                                dataSource: areaOptions,
+                                showSelectionControls: true,
+                                showMultiTagOnly: false,
+                                selectAllMode: "allPages",
+                                width: "20vw"
+                            }
+                        }
+                    ]
+                });
 
             $("#proses").dxButton({
                 text: "View",
@@ -122,7 +126,11 @@
                         alm = "<?php echo e(url('/rpt_get_salesPanelperMonth')); ?>";
                     }
 
-                    var prd = new Date($("#period").dxDateBox("instance").option('value'));
+
+                    var formInstance = $("#filterForm").dxForm("instance");
+                    var formData = formInstance.option("formData");
+                    var prd = new Date(formData.period);
+                    var districts = formData.district;
 
                     $.ajaxSetup({
                         headers: {
@@ -133,24 +141,68 @@
                     $.ajax({
                         url: alm,
                         data: {
-                            "data": prd.toLocaleDateString()
+                            "data": prd.toLocaleDateString(),
+                            "district": districts
                         },
                         type: "post",
                         success: function(data) {
-
                             var dataGrid = $('#gridContainer').dxDataGrid('instance');
                             dataGrid.option('dataSource', data.data);
                             dataGrid.refresh();
-
                         },
                         error: function(xhr, status, response) {
                             errorHandlers(xhr, status);
                         }
-
-
-
                     });
                 }
+            });
+
+            $("#exportByDistrict").dxButton({
+              text: "Export sales district",
+              type: "success",
+              onClick: async function(e) {
+                const exportUrl = "<?php echo e(url('/report-customer-export')); ?>";
+                const formInstance = $("#filterForm").dxForm("instance");
+                const formData = formInstance.option("formData");
+                const prd = new Date(formData.period);
+                const districts = formData.district;
+                const postData = {
+                  period: prd.toISOString().slice(0, 10),
+                  districts
+                };
+
+                try {
+                  const response = await fetch(exportUrl, {
+                    method: "POST",
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    body: JSON.stringify(postData)
+                  });
+
+                  if (!response.ok) throw new Error('Network response was not ok');
+
+                  const blob = await response.blob();
+                  let filename = "Sales_Report_By_District.xlsx";
+                  const disposition = response.headers.get('Content-Disposition');
+                  if (disposition && disposition.includes('filename=')) {
+                  filename = `${disposition.split('filename=')[1].replace(/['"]/g, '')}`;
+                  }
+                  const link = document.createElement('a');
+                  const url = window.URL.createObjectURL(blob);
+                  link.href = url;
+                  link.download = filename;
+                  document.body.appendChild(link);
+                  link.click();
+                  setTimeout(() => {
+                  document.body.removeChild(link);
+                  window.URL.revokeObjectURL(url);
+                  }, 100);
+                } catch (error) {
+                  errorHandlers(error, "error");
+                }
+              }
             });
 
             $("#gridContainer").dxDataGrid({
