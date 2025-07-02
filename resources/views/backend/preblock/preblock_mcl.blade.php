@@ -175,20 +175,20 @@
 
             // Only refresh and check grid if the tab is now active
             if ($(this).parent().hasClass('active')) {
-            if (target === '#Ent') {
-                showNoDataIfEmpty('#institusi-grid');
-                const grid = $('#institusi-grid').dxDataGrid('instance');
-                if (grid) {
-                grid.refresh();
+                if (target === '#Ent') {
+                    showNoDataIfEmpty('#institusi-grid');
+                    const grid = $('#institusi-grid').dxDataGrid('instance');
+                    if (grid) {
+                    grid.refresh();
+                    }
                 }
-            }
-            if (target === '#Lst') {
-                showNoDataIfEmpty('#list-panel');
-                const grid = $('#list-panel').dxDataGrid('instance');
-                if (grid) {
-                grid.refresh();
+                if (target === '#Lst') {
+                    showNoDataIfEmpty('#list-panel');
+                    const grid = $('#list-panel').dxDataGrid('instance');
+                    if (grid) {
+                    grid.refresh();
+                    }
                 }
-            }
             }
         });
 
@@ -221,7 +221,7 @@
 
         function setGeneratedTransNo() {
             const baseUrl = window.location.origin;
-            $.getJSON(baseUrl + '/generate-transno', function(res) {
+            $.getJSON(`${baseUrl}/generate-transno`, function(res) {
                 if (res.trans_no) {
                     headerDxForm.option('formData.trans_no', res.trans_no);
                     headerDxForm.repaint();

@@ -4,7 +4,7 @@ $(function() {
     $("#list-panel").dxDataGrid({
         dataSource: new DevExpress.data.CustomStore({
             load: function() {
-                return $.getJSON(baseUrl + '/crm-visits')
+                return $.getJSON(`${baseUrl}/crm-visits`)
                     .then(function(result) {
                         return result;
                     })

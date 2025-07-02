@@ -218,6 +218,7 @@ function BootboxContent() {
     `;
 
     let object = $('<div/>').html(frm_str).contents();
+    const baseUrl = window.location.origin;
     const cStore = new DevExpress.data.CustomStore({
         load: function (loadOptions) {
             const d = $.Deferred();
