@@ -159,8 +159,9 @@
             });
 
             $("#exportByDistrict").dxButton({
-              text: "Export sales district",
-              type: "success",
+              icon: 'fa fa-file-excel-o',
+              text: "Export sales by district",
+              type: "normal",
               onClick: async function(e) {
                 const exportUrl = "{{ url('/report-customer-export') }}";
                 const formInstance = $("#filterForm").dxForm("instance");
@@ -182,13 +183,23 @@
                     body: JSON.stringify(postData)
                   });
 
-                  if (!response.ok) throw new Error('Network response was not ok');
+                  if (!response.ok) {
+                    // Try to parse error message from response
+                    let errorMsg = 'Export failed.';
+                    try {
+                      const errorData = await response.json();
+                      if (errorData && errorData.message) {
+                        errorMsg = errorData.message;
+                      }
+                    } catch (e) {}
+                    throw new Error(errorMsg);
+                  }
 
                   const blob = await response.blob();
                   let filename = "Sales_Report_By_District.xlsx";
                   const disposition = response.headers.get('Content-Disposition');
                   if (disposition && disposition.includes('filename=')) {
-                  filename = `${disposition.split('filename=')[1].replace(/['"]/g, '')}`;
+                    filename = `${disposition.split('filename=')[1].replace(/['"]/g, '')}`;
                   }
                   const link = document.createElement('a');
                   const url = window.URL.createObjectURL(blob);
@@ -197,11 +208,17 @@
                   document.body.appendChild(link);
                   link.click();
                   setTimeout(() => {
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
                   }, 100);
                 } catch (error) {
-                  errorHandlers(error, "error");
+                  DevExpress.ui.notify({
+                    message: error && error.message ? error.message : "Export failed.",
+                    type: "error",
+                    displayTime: 4000,
+                    width: 450,
+                    position: { my: "right top", at: "right top" }
+                  });
                 }
               }
             });

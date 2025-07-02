@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use ZipArchive;
+
 class ReportSalesDistrictController extends Controller
 {
     /**
@@ -29,17 +33,62 @@ class ReportSalesDistrictController extends Controller
         $period = $input['period'] ?? null;
         $districts = $input['districts'] ?? [];
 
-        $query = \App\Models\SalesCustomerReport::query();
+        $baseQuery = \App\Models\SalesCustomerReport::query();
         if ($period) {
-            $query->where('period_month', date('m', strtotime($period)))
+            $baseQuery->where('period_month', date('m', strtotime($period)))
               ->where('period_year', date('Y', strtotime($period)));
         }
         if (!empty($districts)) {
-            $query->whereIn('distName', $districts);
+            $baseQuery->whereIn('distName', $districts);
         }
 
-        $periodParam = $period ? date('Y-m', strtotime($period)) : null;
+        $areaNames = (clone $baseQuery)->groupBy('areaName')->pluck('areaName');
+        if ($areaNames->isEmpty()) {
+            return response()->json(['message' => 'No data found for the selected filters.'], 404);
+        }
 
-        return new \App\Exports\SalesReportsExport($query, $periodParam);
+        $periodParam = $period ? date('Y-m', strtotime($period)) : 'all-time';
+        $zipFileName = 'Sales By Customer_' . $periodParam . '.zip';
+        $zipFilePath = storage_path('app/' . $zipFileName);
+
+        $tempExportPath = storage_path('app/temp_exports/' . uniqid());
+        File::makeDirectory($tempExportPath, 0755, true);
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
+            // Clean up if zip creation fails
+            File::deleteDirectory($tempExportPath);
+            throw new \Exception("Error: Could not create zip archive.");
+        }
+
+        try {
+            foreach ($areaNames as $areaName) {
+                // Clone the base query again for each area
+                $areaQuery = (clone $baseQuery)->where('areaName', $areaName);
+
+                // Get the last date of the period month
+                $lastDate = $period ? date('t-m-Y', strtotime($period . '-01')) : 'all-time';
+                $areaPart = $areaName ? ' - ' . preg_replace('/[^A-Za-z0-9\-_]/', '_', $areaName) : '';
+                $excelFileName = 'Sales By Customer ' . $lastDate . $areaPart . '.xlsx';
+                $tempExcelFilePath = $tempExportPath . '/' . $excelFileName;
+                
+                $storePath = 'temp_exports/' . basename($tempExportPath) . '/' . $excelFileName;
+
+                // Use your existing SalesReportsExport class to create and store the file
+                Excel::store(
+                    new \App\Exports\SalesReportsExport($areaQuery),
+                    $storePath
+                );
+
+                $zip->addFile($tempExcelFilePath, $excelFileName);
+            }
+        } finally {
+            $zip->close();
+            File::deleteDirectory($tempExportPath);
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+
+        // return new \App\Exports\SalesReportsExport($query, $periodParam);
     }
 }

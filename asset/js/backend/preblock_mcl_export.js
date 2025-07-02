@@ -109,7 +109,8 @@ function exportData() {
         try {
             year = encodeURIComponent(year);
             month = encodeURIComponent(month);
-            const url = `/crm-visits?year=${year}&month=${month}`;
+            const baseUrl = window.location.origin;
+            const url = `${baseUrl}/crm-visits?year=${year}&month=${month}`;
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -242,7 +243,7 @@ function exportData() {
                         // Use a POST request with CSRF token for better security
                         const form = document.createElement('form');
                         form.method = 'POST';
-                        form.action = '/crm-visits/export-pdf';
+                        form.action = '${baseUrl}/crm-visits/export-pdf';
 
                         // Add CSRF token if available
                         const csrfToken = (window.parent || window).document.querySelector('meta[name="csrf-token"]');

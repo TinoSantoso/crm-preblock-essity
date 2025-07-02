@@ -84,7 +84,8 @@ async function loadData() {
     if (month) params.append('month', month);
     if (visit_date) params.append('visit_date', visit_date);
     try {
-        const res = await fetch(`/crm-visits?${params.toString()}`);
+        const baseUrl = window.location.origin;
+        const res = await fetch(`${baseUrl}/crm-visits?${params.toString()}`);
         if (res.status === 404) {
             throw new Error('No data found for the selected filters.');
         }

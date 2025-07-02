@@ -9,25 +9,22 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Excel;
 
-
-class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Responsable, WithStyles
+class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Responsable, WithStyles, WithColumnFormatting
 {
     use \Maatwebsite\Excel\Concerns\Exportable;
 
-    private $fileName;
     private $writerType = Excel::XLSX;
     protected $query;
 
     /**
      * @param Builder $query
-     * @param string|null $period Format: YYYY-MM (e.g. 2025-07)
      */
-    public function __construct(Builder $query, $period = null)
+    public function __construct(Builder $query)
     {
         $this->query = $query;
-        $this->fileName = $this->generateFileName($period);
     }
 
     /**
@@ -46,21 +43,7 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
         // Apply background color to both heading rows (A1:S2) to cover LY Nett
         $sheet->getStyle('A1:S2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFE6EEF5');
-    }
-    
-
-    /**
-     * Generate file name based on period (YYYY-MM)
-     */
-    private function generateFileName($period)
-    {
-        if ($period && preg_match('/^\\d{4}-\\d{2}$/', $period)) {
-            // Get last date of the month
-            $lastDate = date('t-m-Y', strtotime($period.'-01'));
-            return 'Sales By Customer '.$lastDate.'.xlsx';
-        }
-        return 'Sales By Customer.xlsx';
-    }
+    }    
 
     public function query()
     {
@@ -69,14 +52,6 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
 
     public function headings(): array
     {
-        // Get current month and last year month for headings
-        $period = null;
-        if (preg_match('/Sales By Customer (\d{4}-\d{2}-\d{2})\.xlsx/', $this->fileName, $matches)) {
-            $period = $matches[1];
-        }
-        $currentMonth = $period ? date('F Y', strtotime($period)) : 'Current Month';
-        $lastYearMonth = $period ? date('F Y', strtotime('-1 year', strtotime($period))) : 'Last Year';
-
         // First row: merged headings
         $headings[] = [
             'District',
@@ -90,8 +65,8 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
             'Customer Name',
             'Product Group',
             'Product Name',
-            $currentMonth, '', '', '',
-            $lastYearMonth, '', '', '',
+            'Current Month', '', '', '',
+            'Last Year', '', '', '',
         ];
 
         // Second row: sub-headings
@@ -126,6 +101,23 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
             $row->ly_qty ?? 0,
             $row->ly_discount ?? 0,
             $row->ly_netSales ?? 0,
+        ];
+    }
+
+    /**
+     * Set column formats for numeric columns using PhpSpreadsheet's NumberFormat
+     */
+    public function columnFormats(): array
+    {
+        return [
+            'L' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'M' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'N' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'O' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'P' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'Q' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'R' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'S' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
         ];
     }
 }

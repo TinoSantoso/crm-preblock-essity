@@ -17,7 +17,7 @@ class SalesCustomerReportsTableSeeder extends Seeder
     public function run()
     {
         $areaNames = [
-            "Northern Sumatra", "Bali Nusra", "Easter Jakarta", "Ecommerce", "Far East", "Kalimantan",
+            "Northern Sumatra", "Bali Nusra", "Eastern Jakarta", "Ecommerce", "Far East", "Kalimantan",
             "Northern East Java", "Northern Central Java", "West Java", "Western Jakarta",
             "Southern East Java", "Southern Central Java", "Southern Sumatra"
         ];

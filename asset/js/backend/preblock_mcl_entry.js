@@ -229,7 +229,7 @@ function BootboxContent() {
     const cStore = new DevExpress.data.CustomStore({
         load: function (loadOptions) {
             const d = $.Deferred();
-            $.getJSON(`/crm-details`, function(data) {
+            $.getJSON(`${baseUrl}/crm-details`, function(data) {
                 d.resolve(data);
             });
             return d.promise();
