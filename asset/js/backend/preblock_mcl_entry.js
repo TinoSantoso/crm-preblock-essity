@@ -49,15 +49,7 @@ $(function() {
                 editorType: "dxTextArea",
                 colSpan: 1,
                 editorOptions: { height: 35, disabled: true }
-            },
-            /* {
-                dataField: "empId",
-                visible: false, // Hide the Employee ID field
-                label: { text: "Employee ID" },
-                editorType: "dxTextBox",
-                colSpan: 1,
-                editorOptions: { disabled: true, readOnly: true },
-            } */
+            }
         ]
     }).dxForm("instance");
 
