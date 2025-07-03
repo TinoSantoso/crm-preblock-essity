@@ -39,9 +39,13 @@
     <!-- DevExpress Theme -->
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/24.1.7/css/dx.light.css">
     
-    
     <!-- DevExpress Core -->
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/24.1.7/js/dx.all.js"></script>
+    <script type="text/javascript">
+        const APP_BASE_URL = {!! json_encode(url('/')) !!};
+        const APP_HOST = window.location.host;
+        const APP_ORIGIN = window.location.origin;
+    </script>
 
 </head>
 

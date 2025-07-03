@@ -318,22 +318,21 @@ class PreblockMclController extends Controller
         $visits = $query->get();
 
         try {
-            // Check if all visits have empty details
+            // If all visits have empty details, return empty array with 200 OK
             if ($visits->isEmpty() || $visits->every(function($visit) {
                 return $visit->details->isEmpty();
             })) {
-                throw new \Exception('No visits with details found matching the specified criteria.');
+                return response()->json([
+                    'data' => [],
+                    'message' => 'No visits found.'
+                ]);
             }
         } catch (\Exception $e) {
-            Log::error('Error fetching visits: ' . $e->getMessage(), [
-                'query' => $query->toSql(),
-                'bindings' => $query->getBindings()
-            ]);
+            Log::error('Error processing visits in getVisits: ' . $e->getMessage());
             return response()->json([
                 'status' => 'failed',
-                'error' => $e->getMessage(),
-                'result' => []
-            ], 404);
+                'error' => $e->getMessage()
+            ], 500);
         }
 
         // Filter out visits with no details after relationship constraints

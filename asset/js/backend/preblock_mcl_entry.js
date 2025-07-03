@@ -218,11 +218,10 @@ function BootboxContent() {
     `;
 
     let object = $('<div/>').html(frm_str).contents();
-    const baseUrl = window.location.origin;
     const cStore = new DevExpress.data.CustomStore({
         load: function (loadOptions) {
             const d = $.Deferred();
-            $.getJSON(`${baseUrl}/crm-details`, function(data) {
+            $.getJSON(`${APP_BASE_URL}/crm-details`, function(data) {
                 d.resolve(data);
             });
             return d.promise();

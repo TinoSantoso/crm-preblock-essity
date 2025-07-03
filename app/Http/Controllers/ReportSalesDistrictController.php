@@ -44,7 +44,7 @@ class ReportSalesDistrictController extends Controller
 
         $areaNames = (clone $baseQuery)->groupBy('areaName')->pluck('areaName');
         if ($areaNames->isEmpty()) {
-            return response()->json(['message' => 'No data found for the selected filters.'], 404);
+            return response()->json(['message' => 'No data found for the selected filters.'], 200);
         }
 
         $periodParam = $period ? date('Y-m', strtotime($period)) : 'all-time';

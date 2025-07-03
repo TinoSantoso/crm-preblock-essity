@@ -74,18 +74,9 @@
                                                             <div id="dtl" style="margin-right: 10px;margin-left:10px"></div>
                                                     </div>
                                                     
-                                                    
                                                 </div>
                                             </div>
-
-                                                
                                             <div id="summary"></div>
-                                        </div>
-
-                                        <!----------------------Tab List------------------------->
-                                        
-                                        <div id="Lst" class="tab-pane" style=" position: relative; ">
-                                            <div id="list-panel"></div>
                                         </div>
                                         
                                         <!----------------------Tab Visit------------------------->
@@ -150,15 +141,15 @@
 
     $(document).ready(function() {
         // On page load, activate the tab and pane marked as active or from storage
-        var storedTab = getActiveTab();
-        var $tabToActivate;
+        const storedTab = getActiveTab();
+        let $tabToActivate;
         if (storedTab && $('.nav-tabs a[href="' + storedTab + '"]').length) {
             $tabToActivate = $('.nav-tabs a[href="' + storedTab + '"]');
         } else {
             $tabToActivate = $('.nav-tabs li.active a');
         }
         if ($tabToActivate && $tabToActivate.length) {
-            var target = $tabToActivate.attr('href');
+            const target = $tabToActivate.attr('href');
             $('.tab-pane').removeClass('active show');
             $('.nav-tabs li').removeClass('active');
             $tabToActivate.parent().addClass('active');
@@ -167,7 +158,7 @@
 
         $('.nav-tabs a').on('click', function(e) {
             e.preventDefault();
-            var target = $(this).attr('href');
+            const target = $(this).attr('href');
             // Remove 'active' and 'show' from all tab-panes and nav-tabs
             $('.tab-pane').removeClass('active show');
             $('.nav-tabs li').removeClass('active');

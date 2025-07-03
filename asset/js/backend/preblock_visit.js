@@ -84,8 +84,7 @@ async function loadData() {
     if (month) params.append('month', month);
     if (visit_date) params.append('visit_date', visit_date);
     try {
-        const baseUrl = window.location.origin;
-        const res = await fetch(`${baseUrl}/crm-visits?${params.toString()}`);
+        const res = await fetch(`${APP_BASE_URL}/crm-visits?${params.toString()}`);
         if (res.status === 404) {
             throw new Error('No data found for the selected filters.');
         }
@@ -142,7 +141,7 @@ async function loadData() {
                                                 cellInfo.data.is_visited = e.value ? 1 : 0;
                                                 grid.refresh();
                                                 const detailId = cellInfo.data.id;
-                                                fetch(`/crm-visit-detail/${detailId}/is-visited`, {
+                                                fetch(`${APP_BASE_URL}/crm-visit-detail/${detailId}/is-visited`, {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json',

@@ -1,10 +1,9 @@
 $(function() {
     // Tab List: dxDataGrid for crm_visits
-    const baseUrl = window.location.origin;
     $("#list-panel").dxDataGrid({
         dataSource: new DevExpress.data.CustomStore({
             load: function() {
-                return $.getJSON(`${baseUrl}/crm-visits`)
+                return $.getJSON(`${APP_BASE_URL}/crm-visits`)
                     .then(function(result) {
                         return result;
                     })
