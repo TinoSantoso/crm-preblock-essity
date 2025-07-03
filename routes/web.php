@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -19,7 +21,7 @@ $router->get('/', function () {
 });
 
 // Preblock routes
-$router->get('/preblock', 'PreblockMclController@index');
+Route::get('/preblock', 'PreblockMclController@index');
 $router->get('/preblock-visit', 'PreblockMclController@showVisit');
 $router->get('/crm-details', 'PreblockMclController@getAllCrmDetails');
 $router->get('/generate-transno', 'PreblockMclController@generateTransNo');
@@ -30,8 +32,8 @@ $router->get('/crm-visits', 'PreblockMclController@getVisits');
 $router->post('/crm-visit-detail/{id}/is-visited', 'PreblockMclController@updateIsVisited');
 $router->post('/crm-visits/export-pdf', 'PreblockMclController@exportPdf');
 
-$router->get('/report-customer', 'ReportSalesDistrictController@index');
-$router->post('/report-customer-export', 'ReportSalesDistrictController@exportByCustomer');
+Route::get('/report-customer', 'ReportSalesDistrictController@index');
+Route::post('/report-customer-export', 'ReportSalesDistrictController@exportByCustomer');
 
 $router->group(['prefix' => 'auth'], function ($router) {
     $router->post('login', 'AuthController@login'); // No middleware here!
