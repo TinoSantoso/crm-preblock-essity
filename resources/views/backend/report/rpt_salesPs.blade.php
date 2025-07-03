@@ -38,6 +38,7 @@
                         <div class="dx-field" style="margin-bottom:20px">
                           <div id="proses" style="margin-top:10px; display: inline-block;"></div>
                           <div id="exportByDistrict" style="margin-top:10px; display: inline-block; margin-left: 10px;"></div>
+                          <div id="exportLoadingPanel"></div>
                         </div>
                         <div id="autoExpand" style="margin-top:10px"></div>
                         <div id="gridContainer" style="padding-top:20px"></div>
@@ -158,12 +159,25 @@
                 }
             });
 
+            // Initialize the loading panel
+            $("#exportLoadingPanel").dxLoadPanel({
+                message: "Exporting, please wait...",
+                visible: false,
+                shadingColor: "rgba(0,0,0,0.4)",
+                width: 300,
+                height: 100,
+                showIndicator: true,
+                showPane: true,
+                shading: true,
+                closeOnOutsideClick: false
+            });
+
             $("#exportByDistrict").dxButton({
               icon: 'fa fa-file-excel-o',
               text: "Export sales by district",
               type: "normal",
               onClick: async function(e) {
-                const exportUrl = "{{ url('/report-customer-export') }}";
+                const exportUrl = `${APP_BASE_URL}/report-customer-export`;
                 const formInstance = $("#filterForm").dxForm("instance");
                 const formData = formInstance.option("formData");
                 const prd = new Date(formData.period);
@@ -172,6 +186,8 @@
                   period: prd.toISOString().slice(0, 10),
                   districts
                 };
+                // Show loading panel
+                $("#exportLoadingPanel").dxLoadPanel("instance").option("visible", true);
 
                 try {
                   const response = await fetch(exportUrl, {
@@ -183,16 +199,21 @@
                     body: JSON.stringify(postData)
                   });
 
+                  // Try to parse JSON if content-type is application/json (for error/no data)
+                  const contentType = response.headers.get('content-type') || '';
+                  if (contentType.includes('application/json')) {
+                    const json = await response.json();
+                    if (json && json.success === false) {
+                      throw new Error(json.message || "No data found for the selected filters.");
+                    }
+                  }
+
                   if (!response.ok) {
-                    // Try to parse error message from response
-                    let errorMsg = 'Export failed.';
-                    try {
-                      const errorData = await response.json();
-                      if (errorData && errorData.message) {
-                        errorMsg = errorData.message;
-                      }
-                    } catch (e) {}
-                    throw new Error(errorMsg);
+                    let msg = 'Export failed.';
+                    if ((response.headers.get('content-type') || '').includes('application/json')) {
+                      msg = (await response.json()).message || msg;
+                    }
+                    throw new Error(msg);
                   }
 
                   const blob = await response.blob();
@@ -219,6 +240,8 @@
                     width: 450,
                     position: { my: "right top", at: "right top" }
                   });
+                } finally {
+                  $("#exportLoadingPanel").dxLoadPanel("instance").option("visible", false);
                 }
               }
             });
