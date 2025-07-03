@@ -93,14 +93,14 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
             $row->custName ?? '',
             $row->prodGroup ?? '',
             $row->prod_name ?? '',
-            $row->gross ?? 0,
-            $row->qty ?? 0,
-            $row->discount ?? 0,
-            $row->netSales ?? 0,
-            $row->ly_gross ?? 0,
-            $row->ly_qty ?? 0,
-            $row->ly_discount ?? 0,
-            $row->ly_netSales ?? 0,
+            number_format($row->gross, 0, '.', ','),
+            number_format($row->qty, 0, '.', ','),
+            number_format($row->discount, 0, '.', ','),
+            number_format($row->netSales, 0, '.', ','),
+            number_format($row->ly_gross, 0, '.', ','),
+            number_format($row->ly_qty, 0, '.', ','),
+            number_format($row->ly_discount, 0, '.', ','),
+            number_format($row->ly_netSales, 0, '.', ','),
         ];
     }
 
@@ -110,14 +110,14 @@ class SalesReportsExport implements FromQuery, WithHeadings, WithMapping, Respon
     public function columnFormats(): array
     {
         return [
-            'L' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'M' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'N' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'O' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'P' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'Q' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'R' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
-            'S' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'L' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'M' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'N' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'O' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'P' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'Q' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'R' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
+            'S' => \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER,
         ];
     }
 }
