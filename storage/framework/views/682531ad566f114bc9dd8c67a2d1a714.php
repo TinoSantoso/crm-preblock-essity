@@ -205,6 +205,7 @@
             });
             headerDxForm.itemOption("period", "editorOptions", { 
                 type: "date",
+                value: new Date(),
                 displayFormat: "yyyy-MM",
                 pickerType: "calendar",
                 useMaskBehavior: true,
@@ -229,9 +230,9 @@
         }
 
         function AddNew() {
+            headerDxForm.resetValues();
             enableHeaderDxFormFields();
             setGeneratedTransNo();
-            headerDxForm.resetValues();
             flag_add = true;
             flag_edit = false;
             $("#add").dxButton("instance").option("disabled", true);
@@ -339,7 +340,7 @@
                 callback: function(result) {
                     if(result) {
                         $.ajax({
-                            url: `/destroy/${encodeURIComponent(headerData.trans_no)}`,
+                            url: `${APP_BASE_URL}/destroy/${encodeURIComponent(headerData.trans_no)}`,
                             method: 'DELETE',
                             contentType: 'application/json',
                             headers: {
@@ -373,7 +374,6 @@
             }
             // Get the instance of the institusi-grid DataGrid
             let institusiGrid = $("#institusi-grid").dxDataGrid("instance");
-            // Commit any pending edits before collecting all rows
             institusiGrid.saveEditData();
             // Get all rows from the grid, not just the current page
             institusiGrid.getDataSource().store().load().done(function(allRows) {
@@ -391,14 +391,25 @@
                     }, { position: "top right", direction: "down-push" }, 3000);
                     return;
                 }
+
+                /* const processedRows = allRows.map(row => {
+                    const newRow = { ...row };
+                    // Check if target_call exists on the row and needs conversion
+                    if (newRow.vf) {
+                        const parsedValue = parseInt(newRow.vf, 10);
+                        newRow.vf = isNaN(parsedValue) ? 0 : parsedValue;
+                    }
+                    return newRow;
+                }); */
+
                 let headerData = headerForm ? headerForm.option("formData") : {};
                 (async () => {
                     try {
-                        let url = '/store';
+                        let url = `${APP_BASE_URL}/store`;
                         let method = 'POST';
                         let successMsg = 'Data saved successfully!';
                         if (flag_edit) {
-                            url = '/update';
+                            url = `${APP_BASE_URL}/update`;
                             successMsg = 'Data updated successfully!';
                         }
                         const response = await fetch(url, {

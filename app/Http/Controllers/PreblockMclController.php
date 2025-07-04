@@ -37,12 +37,27 @@ class PreblockMclController extends Controller
     /**
      * Retrieve all crm_details records (for internal use)
      */
-    public function getAllCrmDetails()
+    public function getAllCrmDetails(Request $request)
     {
-        return DB::table('crm_details')
+        $query = DB::table('crm_details')
             ->where('emp_id', $this->auth->employee_id)
-            ->where('target_call', '>', 0)
-            ->get();
+            ->where('target_call', '>', 0);
+
+        // If period is provided as a query param, filter by period (expects 'YYYY-MM')
+        $period = $request->query('period');
+        Log::info('getAllCrmDetails called with period: ' . $period);
+        if ($period) {
+            try {
+                $dt = new \DateTime($period . '-01');
+                $year = $dt->format('Y');
+                $month = $dt->format('m');
+                // $query->where('year', $year)->where('month', $month);
+            } catch (\Exception $e) {
+                // Ignore invalid period, return all
+            }
+        }
+
+        return $query->get();
     }
 
     /**
@@ -147,7 +162,7 @@ class PreblockMclController extends Controller
                         'contact' => $row['individu'] ?? null,
                         'visit_date' => $visitDate,
                         'cat' => $row['cat'] ?? null,
-                        'vf' => $row['vf'] ?? null,
+                        'vf' => (int)$row['vf'] ?? null,
                         'class' => $row['class'] ?? null,
                         'remark' => $row['remark'] ?? null,
                         'created_at' => Carbon::now(),
@@ -257,7 +272,7 @@ class PreblockMclController extends Controller
                     $detail->contact = $row['individu'];
                     $detail->visit_date = $visitDate;
                     $detail->cat = $row['cat'];
-                    $detail->vf = $row['vf'];
+                    $detail->vf = (int)$row['vf'];
                     $detail->class = $row['class'];
                     $detail->remark = $row['remark'] ?? null;
                     $detail->created_at = Carbon::now();

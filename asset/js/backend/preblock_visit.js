@@ -5,7 +5,7 @@ $(function() {
             period: '',
             visit_date: null
         },
-        labelLocation: "top",
+        labelLocation: "left",
         items: [
             {
                 itemType: "group",

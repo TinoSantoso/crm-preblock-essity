@@ -72,7 +72,7 @@ $(function() {
             },
             { dataField: "cat", caption: "Category", dataType: "string", allowEditing: false },
             { dataField: "individu", caption: "Contact Name", dataType: "string", allowEditing: false },
-            { dataField: "vf", caption: "Target Call", dataType: "string", allowEditing: false },
+            { dataField: "vf", caption: "Target Call", dataType: "number", alignment: "left", allowEditing: false },
             { dataField: "class", caption: "Specialty", dataType: "string", allowEditing: false },
             {
                 dataField: "period",
@@ -221,9 +221,26 @@ function BootboxContent() {
     const cStore = new DevExpress.data.CustomStore({
         load: function (loadOptions) {
             const d = $.Deferred();
-            $.getJSON(`${APP_BASE_URL}/crm-details`, function(data) {
-                d.resolve(data);
-            });
+            // Get period value from header-dxform
+            let period = null;
+            if (window.headerDxForm) {
+                const formData = window.headerDxForm.option('formData') || {};
+                period = formData.period;
+            }
+            let periodParam = '';
+            if (period) {
+                let dateObj = (Object.prototype.toString.call(period) === '[object Date]') ? period : new Date(period);
+                if (!isNaN(dateObj)) {
+                    const y = dateObj.getFullYear();
+                    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const d2 = String(dateObj.getDate()).padStart(2, '0');
+                    periodParam = `?period=${m}-${d2}-${y}`;
+                } else if (typeof period === 'string') {
+                    periodParam = `?period=${encodeURIComponent(period)}`;
+                }
+            }
+            
+            $.getJSON(`${APP_BASE_URL}/crm-details${periodParam}`, d.resolve);
             return d.promise();
         }
     });

@@ -3,13 +3,15 @@ $(function() {
     $("#list-panel").dxDataGrid({
         dataSource: new DevExpress.data.CustomStore({
             load: function() {
-                return $.getJSON(`${APP_BASE_URL}/crm-visits`)
-                    .then(function(result) {
-                        return result;
-                    })
-                    .catch(function() {
-                        return [];
-                    });
+                return $.ajax({
+                    url: `${APP_BASE_URL}/crm-visits`,
+                    method: 'GET',
+                    dataType: 'json'
+                }).then(function(result) {
+                    return result;
+                }).catch(function() {
+                    return [];
+                });
             }
         }),
         columns: [
@@ -214,7 +216,7 @@ $(function() {
                                                     headerDxForm.option('formData', {
                                                         trans_no: selected.trans_no,
                                                         transaction_date: selected.created_at ? new Date(selected.created_at) : null,
-                                                        period: selected.year && selected.month ? new Date(selected.year, selected.month, 1) : null,
+                                                        period: selected.year && selected.month ? new Date(selected.year, selected.month - 1, 1) : null,
                                                         remark: selected.remark
                                                     });
                                                     headerDxForm.repaint();
@@ -257,10 +259,10 @@ $(function() {
                                                         entTab.parent().addClass('active');
                                                     }
                                                     localStorage.setItem('preblock_mcl_active_tab', 'Ent');
-                                                    $('#add').dxButton('instance').option('disabled',true);
+                                                    $('#add').dxButton('instance').option('disabled',false);
                                                     $('#save').dxButton('instance').option('disabled',true);
                                                     $('#cancel').dxButton('instance').option('disabled',true);
-                                                    $('#delete').dxButton('instance').option('disabled',true);
+                                                    $('#delete').dxButton('instance').option('disabled',false);
                                                     $('#edit').dxButton('instance').option('disabled',false);
                                                     
                                                     DevExpress.ui.notify({ message: 'Data applied to form', width: 500, type: 'info'}, { position: "top right", direction: "down-push" }, 3000);
