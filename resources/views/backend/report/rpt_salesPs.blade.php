@@ -38,7 +38,6 @@
                         <div class="dx-field" style="margin-bottom:20px">
                           <div id="proses" style="margin-top:10px; display: inline-block;"></div>
                           <div id="exportByDistrict" style="margin-top:10px; display: inline-block; margin-left: 10px;"></div>
-                          <div id="exportLoadingPanel"></div>
                         </div>
                         <div id="autoExpand" style="margin-top:10px"></div>
                         <div id="gridContainer" style="padding-top:20px"></div>
@@ -128,7 +127,6 @@
                         alm = "{{ url('/rpt_get_salesPanelperMonth') }}";
                     }
 
-
                     var formInstance = $("#filterForm").dxForm("instance");
                     var formData = formInstance.option("formData");
                     var prd = new Date(formData.period);
@@ -169,7 +167,7 @@
                 showIndicator: true,
                 showPane: true,
                 shading: true,
-                closeOnOutsideClick: false
+                hideOnOutsideClick: false
             });
 
             $("#exportByDistrict").dxButton({

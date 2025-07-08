@@ -30,7 +30,7 @@ $router->post('/update', 'PreblockMclController@update');
 $router->delete('/destroy/{id}', 'PreblockMclController@destroy');
 $router->get('/crm-visits', 'PreblockMclController@getVisits');
 $router->post('/crm-visit-detail/{id}/is-visited', 'PreblockMclController@updateIsVisited');
-$router->post('/crm-visits/export-pdf', 'PreblockMclController@exportPdf');
+Route::post('/crm-visits/export-pdf', 'PreblockMclController@exportPdf');
 
 Route::get('/report-customer', 'ReportSalesDistrictController@index');
 Route::post('/report-customer-export', 'ReportSalesDistrictController@exportByCustomer');

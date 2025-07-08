@@ -94,7 +94,6 @@ $(function() {
                     hideOnOutsideClick: true,
                     contentTemplate: function() {
                         setTimeout(function() {
-                            // Map schedulerData to the required format
                             const mappedSchedulerData = detailsArr.map(event => {
                                 let title = event.account || event.title || "No Title";
                                 let fullTitle = `${event.account} - ${event.contact}`;
@@ -135,154 +134,109 @@ $(function() {
                                     allowUpdating: false,
                                     allowDeleting: false,
                                 },
-                                onAppointmentTooltipShowing: function() {
+                                onAppointmentClick: function(e) {
+                                    e.cancel = true;
+                                    // Use the selected row data instead of appointment data
+                                    headerDxForm.itemOption("trans_no", "editorOptions", { disabled: true });
+                                    headerDxForm.itemOption("transaction_date", "editorOptions", { disabled: true });
+                                    headerDxForm.itemOption("period", "editorOptions", { 
+                                        disabled: true,
+                                        displayFormat: "yyyy-MM",
+                                        dateSerializationFormat: "yyyy-MM"
+                                    });
+                                    headerDxForm.itemOption("remark", "editorOptions", { disabled: true });
+                                    headerDxForm.option('formData', {
+                                        trans_no: selected.trans_no,
+                                        transaction_date: selected.created_at ? new Date(selected.created_at) : null,
+                                        period: selected.year && selected.month ? new Date(selected.year, selected.month - 1, 1) : null,
+                                        remark: selected.remark
+                                    });
+                                    headerDxForm.repaint();
+
+                                    // Ensure details is a usable array
+                                    let detailsArr = [];
+                                    if (Array.isArray(selected.details)) {
+                                        detailsArr = selected.details;
+                                    } else if (selected.details && typeof selected.details === 'object') {
+                                        detailsArr = Object.values(selected.details);
+                                    }
+
+                                    // Map details to the format for 'institusi-grid'
+                                    const institusiRows = detailsArr.map(row => ({
+                                        id: row.id || null,
+                                        institusi: row.account || '',
+                                        cat: row.cat || '',
+                                        individu: row.contact || '',
+                                        vf: row.vf,
+                                        class: row.class || '',
+                                        period: row.visit_date ? (typeof row.visit_date === 'string' ? new Date(row.visit_date) : row.visit_date) : null,
+                                        remark: row.remark || ''
+                                    }));
+
+                                    const institusiGrid = $("#institusi-grid").dxDataGrid("instance");
+                                    institusiGrid.option({
+                                        dataSource: institusiRows,
+                                        showRowLines: true,
+                                        editing: {
+                                            allowUpdating: false,
+                                            allowAdding: false,
+                                            allowDeleting: false,
+                                        },
+                                        noDataText: ""
+                                    });
+                                    institusiGrid.refresh();
+
+                                    // Switch to the 'Ent' tab
+                                    $('.tab-pane').removeClass('active show');
+                                    $('.nav-tabs li').removeClass('active');
+                                    $("#Ent.tab-pane").addClass("active show");
+                                    const entTab = $('.nav-tabs a[href="#Ent"]');
+                                    if (entTab.length) {
+                                        entTab.parent().addClass('active');
+                                    }
+                                    localStorage.setItem('preblock_mcl_active_tab', 'Ent');
+
+                                    // Update button states
+                                    $('#add').dxButton('instance').option('disabled', false);
+                                    $('#save').dxButton('instance').option('disabled', true);
+                                    $('#cancel').dxButton('instance').option('disabled', true);
+                                    $('#delete').dxButton('instance').option('disabled', false);
+                                    $('#edit').dxButton('instance').option('disabled', false);
+                                    $("#export").dxButton("instance").option("disabled", false);
+
+                                    $("#popup-scheduler").dxPopup("hide");
+                                    $("#visit-scheduler").dxScheduler("dispose");
+
+                                    DevExpress.ui.notify({
+                                        message: 'Data applied to form',
+                                        width: 500,
+                                        type: 'info'
+                                    }, {
+                                        position: "top right",
+                                        direction: "down-push"
+                                    }, 3000);
+
+                                    // --- Your new logic ends here ---
+                                },
+                                onAppointmentFormOpening: function(e) {
+                                    e.cancel = true;
+                                },
+                                onAppointmentTooltipShowing: function(e) {
                                     const tooltipContainer = document.body;
                                     const colorizeMarkers = function() {
                                         $('.dx-tooltip-appointment-item-marker-body').css('background-color', '#ffa94d');
                                     };
+
                                     colorizeMarkers();
                                     if (!window._dxTooltipMarkerObserver) {
                                         window._dxTooltipMarkerObserver = new MutationObserver(colorizeMarkers);
                                         window._dxTooltipMarkerObserver.observe(tooltipContainer, { childList: true, subtree: true });
                                     }
-                                },
-                                onAppointmentFormOpening: function(e) {
-                                    e.popup.option('showTitle', true);
-                                    e.popup.option('showCloseButton', true);
-                                    e.popup.option('title', e.appointmentData.text ? e.appointmentData.text : 'Details of appointment');
-                                    e.popup.option('minWidth', '50%');
-                                    const form = e.form;
-                                    const formData = e.appointmentData;
 
-                                    form.option("width", "auto");
-                                    form.option("height", "auto");
-                                    form.option("colCount", 4);
-                                    form.option("items", [
-                                        {
-                                            label: { text: "Account" },
-                                            colSpan: 2,
-                                            dataField: "title",
-                                            editorType: "dxTextBox",
-                                            editorOptions: {
-                                                value: formData.title,
-                                                readOnly: true
-                                            }
-                                        },
-                                        {
-                                            label: { text: "Contact" },
-                                            colSpan: 2,
-                                            dataField: "contact",
-                                            editorType: "dxTextBox",
-                                            editorOptions: {
-                                                value: formData.contact,
-                                                readOnly: true
-                                            }
-                                        },
-                                        {
-                                            label: { text: "Start Date" },
-                                            dataField: "startDate",
-                                            editorType: "dxDateBox",
-                                            editorOptions: {
-                                                type: "datetime",
-                                                value: formData.startDate,
-                                                readOnly: true
-                                            }
-                                        }, 
-                                        {
-                                            label: { text: "End Date" },
-                                            dataField: "endDate",
-                                            editorType: "dxDateBox",
-                                            editorOptions: {
-                                                type: "datetime",
-                                                value: formData.endDate,
-                                                readOnly: true
-                                            }
-                                        }
-                                    ]);
-
-                                    e.popup.option('toolbarItems', [
-                                        {
-                                            widget: 'dxButton',
-                                            toolbar: 'bottom',
-                                            location: 'after',
-                                            options: {
-                                                text: 'Edit',
-                                                type: 'default',
-                                                icon: 'fa fa-edit',
-                                                onClick: function() {
-                                                    e.popup.hide();
-                                                    $("#popup-scheduler").dxPopup("hide");
-                                                    
-                                                    headerDxForm.option('formData', {
-                                                        trans_no: selected.trans_no,
-                                                        transaction_date: selected.created_at ? new Date(selected.created_at) : null,
-                                                        period: selected.year && selected.month ? new Date(selected.year, selected.month - 1, 1) : null,
-                                                        remark: selected.remark
-                                                    });
-                                                    headerDxForm.repaint();
-                                                    // Defensive: ensure details is an array and not undefined/null
-                                                    let detailsArr = [];
-                                                    if (Array.isArray(selected.details)) {
-                                                        detailsArr = selected.details;
-                                                    } else if (selected.details && typeof selected.details === 'object') {
-                                                        detailsArr = Object.values(selected.details);
-                                                    }
-                                                    // Map details to institusi-grid format, including id (hidden)
-                                                    const institusiRows = detailsArr.map(row => ({
-                                                        id: row.id || null, // keep id in data, but not shown in grid
-                                                        institusi: row.account || '',
-                                                        cat: row.cat || '',
-                                                        individu: row.contact || '',
-                                                        vf: row.vf,
-                                                        class: row.class || '',
-                                                        period: row.visit_date ? (typeof row.visit_date === 'string' ? new Date(row.visit_date) : row.visit_date) : null,
-                                                        remark: row.remark || ''
-                                                    }));
-                                                    const institusiGrid = $("#institusi-grid").dxDataGrid("instance");
-                                                    institusiGrid.option({
-                                                        dataSource: institusiRows,
-                                                        showRowLines: true,
-                                                        editing: {
-                                                            allowUpdating: false,
-                                                            allowAdding: false,
-                                                            allowDeleting: false,
-                                                        },
-                                                        noDataText: ""
-                                                    });
-                                                    institusiGrid.refresh();
-
-                                                    $('.tab-pane').removeClass('active show');
-                                                    $('.nav-tabs li').removeClass('active');
-                                                    $("#Ent.tab-pane").addClass("active show");
-                                                    const entTab = $('.nav-tabs a[href="#Ent"]');
-                                                    if (entTab.length) {
-                                                        entTab.parent().addClass('active');
-                                                    }
-                                                    localStorage.setItem('preblock_mcl_active_tab', 'Ent');
-                                                    $('#add').dxButton('instance').option('disabled',false);
-                                                    $('#save').dxButton('instance').option('disabled',true);
-                                                    $('#cancel').dxButton('instance').option('disabled',true);
-                                                    $('#delete').dxButton('instance').option('disabled',false);
-                                                    $('#edit').dxButton('instance').option('disabled',false);
-                                                    
-                                                    DevExpress.ui.notify({ message: 'Data applied to form', width: 500, type: 'info'}, { position: "top right", direction: "down-push" }, 3000);
-                                                }
-                                            }
-                                        },
-                                        {
-                                            widget: 'dxButton',
-                                            toolbar: 'bottom',
-                                            location: 'after',
-                                            options: {
-                                                text: 'Cancel',
-                                                type: 'normal',
-                                                // icon: 'fa fa-times',
-                                                onClick: function() {
-                                                    e.popup.hide();
-                                                }
-                                            }
-                                        }
-                                    ]);
+                                    // Prevent tooltip from hiding when clicked
+                                    $(document).on('click.keepTooltip', '.dx-scheduler-appointment-tooltip', function(e) {
+                                        e.stopPropagation();
+                                    });
                                 }
                             }).dxScheduler("instance");
 
@@ -290,7 +244,7 @@ $(function() {
                                 if (schedulerInstance) {
                                     const today = new Date();
                                     // Set to an earlier month, then set to current month to force correct rendering
-                                    schedulerInstance.option("currentDate", new Date(today.getFullYear(), today.getMonth() - 1, 1));
+                                    schedulerInstance.option("currentDate", new Date(today.getFullYear(), today.getMonth(), 1));
                                     schedulerInstance.repaint();
                                 }
                             }, 100);

@@ -56,10 +56,10 @@
         <!-- Left side column. contains the logo and sidebar -->
         @include("includes.leftmenu")
 
+        <div id="exportLoadingPanel"></div>
         <div class="content-wrapper">
             @yield('content')
         </div>
-
         <!-- Main Footer -->
         <footer class="main-footer">
                 @include("includes.footer")		

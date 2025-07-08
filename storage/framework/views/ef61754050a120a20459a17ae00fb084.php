@@ -56,10 +56,10 @@
         <!-- Left side column. contains the logo and sidebar -->
         <?php echo $__env->make("includes.leftmenu", \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+        <div id="exportLoadingPanel"></div>
         <div class="content-wrapper">
             <?php echo $__env->yieldContent('content'); ?>
         </div>
-
         <!-- Main Footer -->
         <footer class="main-footer">
                 <?php echo $__env->make("includes.footer", \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>		

@@ -240,6 +240,7 @@
             $("#delete").dxButton("instance").option("disabled", true);
             $("#save").dxButton("instance").option("disabled", false);
             $("#cancel").dxButton("instance").option("disabled", false);
+            $("#export").dxButton("instance").option("disabled", true);
 
             // Clear institusi-grid data
             const grid = $("#institusi-grid").dxDataGrid("instance");
@@ -272,6 +273,7 @@
             $("#delete").dxButton("instance").option("disabled", true);
             $("#save").dxButton("instance").option("disabled", true);
             $("#cancel").dxButton("instance").option("disabled", true);
+            $("#export").dxButton("instance").option("disabled", true);
             // Clear institusi-grid data
             const grid = $("#institusi-grid").dxDataGrid("instance");
             grid.option({
@@ -314,6 +316,7 @@
             $('#cancel').dxButton('instance').option('disabled',false);
             $('#delete').dxButton('instance').option('disabled',true);
             $('#edit').dxButton('instance').option('disabled',true);
+            $("#export").dxButton("instance").option("disabled", false);
         }
 
         function del() {
@@ -392,16 +395,6 @@
                     return;
                 }
 
-                /* const processedRows = allRows.map(row => {
-                    const newRow = { ...row };
-                    // Check if target_call exists on the row and needs conversion
-                    if (newRow.vf) {
-                        const parsedValue = parseInt(newRow.vf, 10);
-                        newRow.vf = isNaN(parsedValue) ? 0 : parsedValue;
-                    }
-                    return newRow;
-                }); */
-
                 let headerData = headerForm ? headerForm.option("formData") : {};
                 (async () => {
                     try {
@@ -437,6 +430,7 @@
                             $("#cancel").dxButton("instance").option("disabled", true);
                             $("#delete").dxButton("instance").option("disabled", false);
                             $("#edit").dxButton("instance").option("disabled", false);
+                            $("#export").dxButton("instance").option("disabled", false);
                             const grid = $("#institusi-grid").dxDataGrid("instance");
                             grid.option({
                                 editing: {
@@ -506,6 +500,7 @@
             icon: 'fa fa-file-pdf-o',
             text: "Export",
             width: 110,
+            disabled: true,
             onClick: function(e) { exportData(); }
         });
     });

@@ -469,6 +469,8 @@ class PreblockMclController extends Controller
         $colWidthInstitusi = env('PDF_COL_WIDTH_INSTITUSI');
         $colWidthSpecialty = env('PDF_COL_WIDTH_SPECIALTY');
         $colWidthIndividu = env('PDF_COL_WIDTH_INDIVIDU');
+        $visitDateTopMargin = env('PDF_VISIT_DATE_TOP_MARGIN');
+        $tableTopMargin = env('PDF_TABLE_TOP_MARGIN');
 
         // Fetch the data
         $query = \App\Models\CrmVisit::with('details')->orderByDesc('created_at');
@@ -519,6 +521,17 @@ class PreblockMclController extends Controller
             border: 0.3px solid #ddd;
             font-size: ' . $fontSizeTable . 'px;
             margin-bottom: 4px;
+            page-break-inside: auto;
+        }
+        table:not(:first-of-type) {
+            margin-top: 20mm;
+        }
+        thead {
+            display: table-header-group;
+        }
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
         }
         th, td {
             text-align: left;
@@ -535,6 +548,9 @@ class PreblockMclController extends Controller
             font-weight: bold;
             margin-bottom: 1px;
             font-size: ' . $fontSizeSubtitle . 'px;
+            margin-top: ' . $visitDateTopMargin . 'px;
+            page-break-before: auto;
+            page-break-after: avoid;
         }
         .period-label {
             margin-left: 8px;
@@ -550,7 +566,7 @@ class PreblockMclController extends Controller
         }
         </style>';
         $html .= '</head><body><div class="container">';
-        $html .= '<div style="display: flex; align-items: center; margin-bottom: 2px;">'
+        $html .= '<div style="display: flex; align-items: center;">'
             . '<h2>MCL Preblock</h2>'
             . '<div class="period-label"><b>Period:</b> ' . htmlspecialchars($year) . '-' . htmlspecialchars($month) . '</div>'
             . '</div>';
@@ -569,7 +585,7 @@ class PreblockMclController extends Controller
                 . '<th style="width:' . $colWidthIndividu . '%; text-align: center;">Contact</th>'
                 . '<th style="width:10%; text-align: center;">Visit Date</th>'
                 . '</tr></thead><tbody>';
-            $rowNo = 1; // Reset row number for each visit date group
+            $rowNo = 1;
             foreach ($details as $detail) {
                 $html .= '<tr>'
                 . '<td>' . $rowNo++ . '</td>'
